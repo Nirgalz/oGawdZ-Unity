@@ -194,6 +194,8 @@ MonoBehaviour:
   braking: 10
   maxSpeed: 2
   rotationSpeed: 15
+  _IsGrounded: 0
+  _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &-5212011053163753637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,3 +209,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  _prefabBall: {fileID: 3612612885943505525, guid: 51ebb0be5e498e046bb0a05ef24b7d20, type: 3}
