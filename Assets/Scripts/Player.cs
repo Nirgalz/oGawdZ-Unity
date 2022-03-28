@@ -6,6 +6,7 @@ public class Player : NetworkBehaviour
 {
     private NetworkCharacterControllerPrototype _cc;
     [SerializeField] private Ball _prefabBall;
+    [SerializeField] private int _cameraSpeed;
     private Vector3 _forward;
     [Networked] private TickTimer delay { get; set; }
 
@@ -25,11 +26,8 @@ public class Player : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             data.direction.Normalize();
-            _cc. Move(10*data.direction*Runner.DeltaTime);
-            
-            if (data.direction.sqrMagnitude > 0)
-                _forward = data.direction;
-        
+            transform.position += (_cameraSpeed*data.direction*Runner.DeltaTime);
+           
             if (delay.ExpiredOrNotRunning(Runner))
             {
                 if ((data.buttons & NetworkInputData.MOUSEBUTTON1) != 0)

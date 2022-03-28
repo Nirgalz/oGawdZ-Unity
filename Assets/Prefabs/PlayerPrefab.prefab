@@ -211,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _prefabBall: {fileID: 3612612885943505525, guid: 51ebb0be5e498e046bb0a05ef24b7d20, type: 3}
+  _cameraSpeed: 20
 --- !u!20 &6697957944935472367
 Camera:
   m_ObjectHideFlags: 0
