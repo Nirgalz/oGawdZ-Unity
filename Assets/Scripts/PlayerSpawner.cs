@@ -9,6 +9,7 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner _runner;
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private SpawnPoint[] _spawnPoints;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     private bool _mouseButton0;
 
@@ -58,6 +59,9 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     async void StartGame(GameMode mode)
     {
+        _spawnPoints = GetComponentsInChildren<SpawnPoint>();
+        
+        
         // Create the Fusion runner and let it know that we will be providing user input
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
@@ -75,7 +79,13 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         // Create a unique position for the player
-        Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.DefaultPlayers) * 3, 1, 0);
+        Debug.Log(player.RawEncoded );
+        Debug.Log(runner.Config.Simulation.DefaultPlayers );
+        
+        Vector3 spawnPosition = player.RawEncoded == 10 ? _spawnPoints[0].transform.position : _spawnPoints[player.RawEncoded].transform.position;
+        
+        // Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.DefaultPlayers) * 3, 1, 0);
+
         NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
         // Keep track of the player avatars so we can remove it when they disconnect
         _spawnedCharacters.Add(player, networkPlayerObject);

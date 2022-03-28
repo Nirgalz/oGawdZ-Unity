@@ -1,3 +1,4 @@
+using System;
 using Fusion;
 using UnityEngine;
 
@@ -14,12 +15,17 @@ public class Player : NetworkBehaviour
         _forward = transform.forward;
     }
 
+    public override void Spawned()
+    {
+        transform.Rotate(50,0,0);
+    }
+
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
             data.direction.Normalize();
-            _cc.Move(5*data.direction*Runner.DeltaTime);
+            _cc. Move(10*data.direction*Runner.DeltaTime);
             
             if (data.direction.sqrMagnitude > 0)
                 _forward = data.direction;
