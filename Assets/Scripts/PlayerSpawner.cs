@@ -41,39 +41,27 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
         input.Set(data);
     }
 
-    private void OnGUI()
+    public async void StartGame(string modeStr)
     {
         if (_runner == null)
         {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
+            GameMode mode = modeStr == "Host" ? GameMode.Host : GameMode.Client;
+            _spawnPoints = GetComponentsInChildren<SpawnPoint>();
+        
+        
+            // Create the Fusion runner and let it know that we will be providing user input
+            _runner = gameObject.AddComponent<NetworkRunner>();
+            _runner.ProvideInput = true;
 
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
+            // Start or join (depends on gamemode) a session with a specific name
+            await _runner.StartGame(new StartGameArgs()
             {
-                StartGame(GameMode.Client);
-            }
+                GameMode = mode,
+                SessionName = "TestRoom",
+                Scene = SceneManager.GetActiveScene().buildIndex,
+                SceneObjectProvider = gameObject.AddComponent<NetworkSceneManagerDefault>()
+            });
         }
-    }
-
-    async void StartGame(GameMode mode)
-    {
-        _spawnPoints = GetComponentsInChildren<SpawnPoint>();
-        
-        
-        // Create the Fusion runner and let it know that we will be providing user input
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
-
-        // Start or join (depends on gamemode) a session with a specific name
-        await _runner.StartGame(new StartGameArgs()
-        {
-            GameMode = mode,
-            SessionName = "TestRoom",
-            Scene = SceneManager.GetActiveScene().buildIndex,
-            SceneObjectProvider = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        });
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
