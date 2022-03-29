@@ -18,7 +18,7 @@ public class Player : NetworkBehaviour
 
     public override void Spawned()
     {
-        transform.Rotate(50,0,0);
+        transform.Rotate(60,0,0);
     }
 
     public override void FixedUpdateNetwork()
